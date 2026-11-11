@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Script de Ant estándar de un proyecto "Java with Ant" de NetBeans.
+     NetBeans genera nbproject/build-impl.xml automáticamente al abrir el proyecto. -->
+<project name="SimuladorCompuertasLogicas" default="default" basedir=".">
+    <description>Compila, prueba y ejecuta el proyecto SimuladorCompuertasLogicas.</description>
+    <import file="nbproject/build-impl.xml"/>
+</project>

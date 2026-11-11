@@ -1,0 +1,1 @@
+Carpeta reservada para pruebas JUnit (las pruebas de consola están en src/compuertas/pruebas).

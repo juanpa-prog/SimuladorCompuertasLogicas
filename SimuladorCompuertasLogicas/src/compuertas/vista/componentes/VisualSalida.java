@@ -3,6 +3,7 @@ package compuertas.vista.componentes;
 import compuertas.modelo.Circuito;
 import compuertas.modelo.FuenteLogica;
 import compuertas.modelo.SalidaLogica;
+import compuertas.persistencia.PosicionesCircuito.Tipo;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -59,6 +60,21 @@ public class VisualSalida extends ComponenteVisual {
     @Override
     public void eliminarDelModelo(Circuito circuito) {
         circuito.eliminarSalida(salida);
+    }
+
+    @Override
+    public Tipo getTipoElemento() {
+        return Tipo.SALIDA;
+    }
+
+    @Override
+    public String getNombreElemento() {
+        return salida.getNombre();
+    }
+
+    @Override
+    public FuenteLogica getFuenteConectada(int indice) {
+        return salida.getFuente();
     }
 
     @Override

@@ -3,6 +3,7 @@ package compuertas.vista.componentes;
 import compuertas.modelo.Circuito;
 import compuertas.modelo.FuenteLogica;
 import compuertas.modelo.excepciones.ConexionInvalidaException;
+import compuertas.persistencia.PosicionesCircuito.Tipo;
 import compuertas.vista.contratos.Arrastrable;
 import compuertas.vista.contratos.Dibujable;
 import java.awt.BasicStroke;
@@ -61,6 +62,17 @@ public abstract class ComponenteVisual implements Dibujable, Arrastrable {
 
     /** Quita del modelo el elemento asociado (el controlador lo invoca antes de quitar la vista). */
     public abstract void eliminarDelModelo(Circuito circuito);
+
+    /** Clase de elemento del modelo que representa (entrada, compuerta o salida). Sirve al guardar/abrir. */
+    public abstract Tipo getTipoElemento();
+
+    /** Nombre del elemento del modelo que representa (A, G1, F...). Sirve al guardar/abrir. */
+    public abstract String getNombreElemento();
+
+    /** Fuente conectada al punto de entrada indicado; null si está libre o si no tiene entradas. */
+    public FuenteLogica getFuenteConectada(int indice) {
+        return null;
+    }
 
     protected Color getColorRelleno() {
         return COLOR_RELLENO;

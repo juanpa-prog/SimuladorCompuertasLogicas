@@ -109,14 +109,4 @@ Se anotan para ser transparentes y poder defender cada punto:
 7. **`Configuracion`** guarda un único dato (mostrar cuadrícula): el Singleton está aplicado de forma correcta, pero
    su alcance es pequeño.
 
-## 6. Preguntas probables en la sustentación (y dónde está la respuesta)
 
-| Pregunta | Dónde mirar |
-|---|---|
-| ¿Por qué `ConexionInvalidaException` no es verificada y `FormatoCircuitoException` sí? | Sección 2 |
-| ¿Cómo se agrega una compuerta nueva y qué clases no se tocan? | Sección 4 |
-| ¿Por qué un Singleton para las preferencias y no para `Circuito`? | Sección 3 |
-| ¿Qué pasa si el archivo está corrupto? ¿Se pierde el circuito que tenía abierto? | `FormatoArchivo.md`, `CasosDeUso.md` (Abrir) |
-| ¿Cómo evita el programa un ciclo? | `Compuerta.conectar` + `dependeDe` (ver `DiagramaClases.md`, parte 1) |
-| ¿Por qué la posición (x, y) no está en el modelo? | README, «Decisiones de diseño» |
-| ¿Cómo se evalúa sin `if` por tipo? | `ContratosGUI.md`, «Dónde se evita el if/else por tipo» |

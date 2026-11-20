@@ -37,15 +37,15 @@ ciclo · autoconexión · contenido binario (no UTF-8).
 
 La ventana real no tiene pruebas automáticas; antes de entregar, recorrer esta lista en NetBeans:
 
-- [ ] La paleta agrega cada una de las 6 compuertas, una entrada y una salida.
-- [ ] Una compuerta se arrastra por su cuerpo; el cable la sigue.
-- [ ] Un clic sobre el punto de una entrada alterna 0 ↔ 1 y los indicadores se actualizan.
-- [ ] Un cable se crea arrastrando de una salida a una entrada, y se rechaza un ciclo con un mensaje claro.
-- [ ] «Evaluar» muestra `F = 1   G = 0` en el ejemplo.
-- [ ] «Tabla de verdad» muestra 8 filas en el ejemplo.
-- [ ] «Guardar…» crea el archivo (agrega `.txt` si no se escribió extensión) y avisa en la barra de estado.
-- [ ] Guardar sobre un archivo existente pide confirmación.
-- [ ] «Abrir…» del archivo guardado deja el circuito igual, con los componentes en el mismo lugar.
-- [ ] Abrir un archivo con un error escrito a mano muestra «Línea N: …» y no cambia lo que había en pantalla.
-- [ ] Abrir una imagen o un archivo que no es texto muestra el mensaje de contenido inválido.
-- [ ] Tras abrir, agregar una compuerta nueva continúa la numeración (por ejemplo `G5`).
+- [✓] La paleta agrega cada una de las 6 compuertas, una entrada y una salida.
+- [✓] Una compuerta se arrastra por su cuerpo; el cable la sigue.
+- [✓] Un clic sobre el punto de una entrada alterna 0 ↔ 1 y los indicadores se actualizan.
+- [✓] Un cable se crea arrastrando de una salida a una entrada, y se rechaza un ciclo con un mensaje claro.
+- [✓] «Evaluar» muestra `F = 1   G = 0` en el ejemplo.
+- [✓] «Tabla de verdad» muestra 8 filas en el ejemplo.
+- [✓] «Guardar…» crea el archivo (agrega `.txt` si no se escribió extensión) y avisa en la barra de estado.
+- [✓] Guardar sobre un archivo existente pide confirmación.
+- [✓] «Abrir…» del archivo guardado deja el circuito igual, con los componentes en el mismo lugar.
+- [✓] Abrir un archivo con un error escrito a mano muestra «Línea N: …» y no cambia lo que había en pantalla.
+- [✓] Abrir una imagen o un archivo que no es texto muestra el mensaje de contenido inválido.
+- [✓] Tras abrir, agregar una compuerta nueva continúa la numeración (por ejemplo `G5`).

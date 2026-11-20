@@ -1,7 +1,12 @@
 # Diagramas de clases (UML)
 
 Visibilidad: `+` público, `-` privado, `#` protegido. Triángulo hueco = herencia o implementación,
-rombo negro = composición, flecha simple = asociación.
+rombo negro = composición, rombo hueco = agregación, flecha simple = asociación, flecha punteada =
+dependencia. Un `*` junto al nombre de un método indica que es abstracto.
+
+El diagrama se divide en cinco partes para que cada una se pueda leer completa:
+1. Modelo · 2. Excepciones · 3. Fábrica, catálogo y configuración · 4. Persistencia en texto ·
+5. Vista y controlador.
 
 ## 1. Modelo
 
@@ -11,6 +16,7 @@ classDiagram
 
     class FuenteLogica {
         <<interface>>
+        +getNombre() String
         +getValor() boolean
         +dependeDe(otra) boolean
     }
@@ -20,6 +26,7 @@ classDiagram
         +EntradaLogica(boolean)
         +EntradaLogica(String)
         +EntradaLogica(String, boolean)
+        +getNombre() String
         +getValor() boolean
         +setValor(boolean)
         +alternar()
@@ -27,6 +34,7 @@ classDiagram
     class Compuerta {
         <<abstract>>
         -String nombre
+        +getNombre() String
         +getTipo()* String
         +getNumeroEntradas()* int
         +getEntrada(int)* FuenteLogica
@@ -36,6 +44,7 @@ classDiagram
         +conectar(int, FuenteLogica)
         +desconectar(int)
         +desconectarFuente(FuenteLogica)
+        +estaCompleta() boolean
         +dependeDe(FuenteLogica) boolean
     }
     class CompuertaBinaria {
@@ -67,7 +76,10 @@ classDiagram
     class SalidaLogica {
         -String nombre
         -FuenteLogica fuente
+        +getNombre() String
+        +getFuente() FuenteLogica
         +conectar(FuenteLogica)
+        +desconectar()
         +getValor() boolean
     }
     class Circuito {
@@ -76,13 +88,26 @@ classDiagram
         -List~Compuerta~ compuertas
         -List~SalidaLogica~ salidas
         +agregarEntrada() EntradaLogica
-        +agregarCompuerta(CreadorCompuerta) Compuerta
+        +agregarEntrada(String) EntradaLogica
         +agregarSalida() SalidaLogica
+        +agregarSalida(String) SalidaLogica
+        +agregarCompuerta(CreadorCompuerta) Compuerta
+        +agregarCompuerta(CreadorCompuerta, String) Compuerta
         +conectar(Compuerta, int, FuenteLogica)
         +conectarSalida(SalidaLogica, FuenteLogica)
+        +eliminarEntrada(EntradaLogica) boolean
         +eliminarCompuerta(Compuerta) boolean
+        +eliminarSalida(SalidaLogica) boolean
+        +buscarEntrada(String) EntradaLogica
+        +buscarCompuerta(String) Compuerta
+        +buscarSalida(String) SalidaLogica
+        +evaluarTodas() Map
         +evaluarSalidas() Map
         +generarTablaVerdad() TablaVerdad
+        +limpiar()
+        +getEntradas() List
+        +getCompuertas() List
+        +getSalidas() List
     }
     class TablaVerdad {
         -List~String~ encabezados
@@ -108,7 +133,44 @@ classDiagram
     Circuito ..> TablaVerdad : crea
 ```
 
-## 2. Fábrica (Factory Method) y configuración (Singleton)
+## 2. Excepciones
+
+```mermaid
+classDiagram
+    direction TB
+    class RuntimeException
+    class Exception
+    class CircuitoException {
+        +CircuitoException(String)
+        +CircuitoException(String, Throwable)
+    }
+    class ConexionInvalidaException
+    class EntradaSinConectarException
+    class FormatoCircuitoException {
+        -int linea
+        +FormatoCircuitoException(String)
+        +FormatoCircuitoException(String, int)
+        +FormatoCircuitoException(String, int, Throwable)
+        +getLinea() int
+    }
+
+    RuntimeException <|-- CircuitoException
+    CircuitoException <|-- ConexionInvalidaException
+    CircuitoException <|-- EntradaSinConectarException
+    Exception <|-- FormatoCircuitoException
+```
+
+| Excepción | Tipo | Cuándo se lanza |
+|---|---|---|
+| `CircuitoException` | **no verificada** | Base: uso incorrecto del modelo (nombre duplicado, tabla sin entradas...). |
+| `ConexionInvalidaException` | no verificada | Ciclo, autoconexión, entrada inexistente, fuente ajena al circuito. |
+| `EntradaSinConectarException` | no verificada | Se evalúa algo con una entrada sin conectar. |
+| `FormatoCircuitoException` | **verificada** | El archivo se abrió pero su contenido no es un circuito válido (indica la línea). |
+
+Las fallas de acceso al archivo (no existe, sin permisos) **no** tienen clase propia: se propagan como
+`java.io.IOException`, para no confundir «no se pudo leer» con «lo que se leyó es inválido».
+
+## 3. Fábrica (Factory Method), catálogo y configuración (Singleton)
 
 ```mermaid
 classDiagram
@@ -125,6 +187,12 @@ classDiagram
     class CreadorXOR
     class CreadorNAND
     class CreadorNOR
+    class CatalogoCompuertas {
+        <<final>>
+        +existe(String) boolean
+        +obtener(String) CreadorCompuerta
+        +tipos() List
+    }
     class Compuerta {
         <<abstract>>
     }
@@ -136,6 +204,7 @@ classDiagram
     CreadorCompuerta <|-- CreadorNAND
     CreadorCompuerta <|-- CreadorNOR
     CreadorCompuerta ..> Compuerta : crea
+    CatalogoCompuertas o-- "6" CreadorCompuerta : por tipo
 
     class Preferencias {
         <<interface>>
@@ -153,7 +222,63 @@ classDiagram
     PanelCircuito --> Preferencias : recibe por constructor
 ```
 
-## 3. Vista y controlador
+## 4. Persistencia en texto
+
+```mermaid
+classDiagram
+    direction TB
+    class RepositorioCircuitos {
+        <<interface>>
+        +guardar(Circuito, PosicionesCircuito, Path)
+        +cargar(Path) CircuitoCargado
+    }
+    class RepositorioTexto {
+        <<final>>
+        +CABECERA String
+        +VERSION int
+        +guardar(Circuito, PosicionesCircuito, Path)
+        +cargar(Path) CircuitoCargado
+    }
+    class CircuitoCargado {
+        -Circuito circuito
+        -PosicionesCircuito posiciones
+        +getCircuito() Circuito
+        +getPosiciones() PosicionesCircuito
+    }
+    class PosicionesCircuito {
+        +poner(Tipo, String, int, int)
+        +obtener(Tipo, String) Posicion
+        +cantidad() int
+    }
+    class Posicion {
+        -int x
+        -int y
+    }
+    class Tipo {
+        <<enumeration>>
+        ENTRADA
+        COMPUERTA
+        SALIDA
+    }
+    class Circuito
+    class CatalogoCompuertas
+    class FormatoCircuitoException
+
+    RepositorioCircuitos <|.. RepositorioTexto
+    RepositorioTexto ..> CircuitoCargado : crea
+    RepositorioTexto ..> Circuito : lee y reconstruye
+    RepositorioTexto ..> CatalogoCompuertas : tipo → creador
+    RepositorioTexto ..> FormatoCircuitoException : lanza (contenido inválido)
+    CircuitoCargado --> Circuito
+    CircuitoCargado "1" *-- "1" PosicionesCircuito
+    PosicionesCircuito "1" *-- "0..*" Posicion
+    PosicionesCircuito ..> Tipo
+```
+
+El **modelo no conoce los archivos**: `Circuito` no depende de este paquete. La posición `(x, y)` pertenece a la
+vista, por eso viaja en `PosicionesCircuito` (que no depende de Swing). Formato del archivo: ver `FormatoArchivo.md`.
+
+## 5. Vista y controlador
 
 ```mermaid
 classDiagram
@@ -176,6 +301,9 @@ classDiagram
         -List~PuntoConexion~ pines
         #crearForma()* Shape
         +eliminarDelModelo(Circuito)*
+        +getTipoElemento()* Tipo
+        +getNombreElemento()* String
+        +getFuenteConectada(int) FuenteLogica
         +dibujar(Graphics2D)
         +contiene(int, int) boolean
     }
@@ -195,6 +323,10 @@ classDiagram
     class VisualSalida {
         -SalidaLogica salida
     }
+    class CatalogoVisuales {
+        <<final>>
+        +crear(Compuerta, int, int) VisualCompuerta
+    }
     class PuntoConexion {
         -Sentido sentido
         -int indice
@@ -210,15 +342,39 @@ classDiagram
     }
     class EscuchadorPanel {
         <<interface>>
+        +alConectar(PuntoConexion, PuntoConexion)
+        +alHacerClicEnPin(PuntoConexion)
+        +alEliminarSeleccion()
     }
     class EscuchadorVentana {
         <<interface>>
+        +alAgregarElemento(ElementoPaleta)
+        +alEvaluar()
+        +alGenerarTablaVerdad()
+        +alEliminarSeleccion()
+        +alLimpiar()
+        +alCargarEjemplo()
+        +alGuardar()
+        +alAbrir()
     }
     class VistaCircuito {
         <<interface>>
+        +getPanelCircuito() PanelCircuito
+        +getPanelTabla() PanelTablaVerdad
+        +mostrarEstado(String)
+        +mostrarError(String)
+        +confirmar(String) boolean
+        +elegirArchivoParaGuardar() Path
+        +elegirArchivoParaAbrir() Path
     }
     class VentanaPrincipal
-    class ControladorCircuito
+    class ControladorCircuito {
+        -Circuito circuito
+        -RepositorioCircuitos repositorio
+    }
+    class RepositorioCircuitos {
+        <<interface>>
+    }
 
     Dibujable <|.. ComponenteVisual
     Arrastrable <|.. ComponenteVisual
@@ -232,6 +388,7 @@ classDiagram
     VisualCompuerta <|-- VisualXOR
     VisualCompuerta <|-- VisualNAND
     VisualCompuerta <|-- VisualNOR
+    CatalogoVisuales ..> VisualCompuerta : crea
     ComponenteVisual "1" *-- "1..*" PuntoConexion
     PanelCircuito "1" o-- "0..*" ComponenteVisual
     PanelCircuito "1" o-- "0..*" Cable
@@ -242,4 +399,6 @@ classDiagram
     EscuchadorVentana <|.. ControladorCircuito
     ControladorCircuito --> VistaCircuito
     ControladorCircuito --> Circuito
+    ControladorCircuito --> RepositorioCircuitos
+    ControladorCircuito ..> CatalogoVisuales : reconstruye la vista al abrir
 ```

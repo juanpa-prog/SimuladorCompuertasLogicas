@@ -40,3 +40,23 @@ Con A=1, B=0, C=0: G1 = 0, G2 = 1, **G3 = F = 1**, **G4 = G = 0**.
 | 1 | 0 | 1 | 0 | 1 |
 | 1 | 1 | 0 | 1 | 0 |
 | 1 | 1 | 1 | 1 | 0 |
+
+## Equivalente en archivo
+
+Este mismo circuito, guardado en texto, tiene una línea por objeto (ver `FormatoArchivo.md`):
+
+```
+CIRCUITO;1;Tarea
+ENTRADA;A;true
+ENTRADA;B;false
+ENTRADA;C;false
+COMPUERTA;G1;AND;A;B
+COMPUERTA;G2;NOT;C
+COMPUERTA;G3;OR;G1;G2
+COMPUERTA;G4;XOR;G3;A
+SALIDA;F;G3
+SALIDA;G;G4
+```
+
+Cada nombre de una línea (`A`, `G1`...) es una referencia a otro objeto: al abrir el archivo se vuelven a crear los
+objetos y se enlazan por nombre, de modo que `A` sigue siendo **un único objeto** compartido por `G1` y `G4`.

@@ -3,6 +3,7 @@ package compuertas;
 import compuertas.config.Configuracion;
 import compuertas.controlador.ControladorCircuito;
 import compuertas.modelo.Circuito;
+import compuertas.persistencia.RepositorioTexto;
 import compuertas.vista.VentanaPrincipal;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -20,7 +21,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             Circuito circuito = new Circuito("Circuito 1");
             VentanaPrincipal ventana = new VentanaPrincipal(Configuracion.INSTANCIA);
-            new ControladorCircuito(circuito, ventana);
+            new ControladorCircuito(circuito, ventana, new RepositorioTexto());
             ventana.setVisible(true);
         });
     }

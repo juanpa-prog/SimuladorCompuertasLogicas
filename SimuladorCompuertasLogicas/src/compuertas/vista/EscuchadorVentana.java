@@ -14,4 +14,8 @@ public interface EscuchadorVentana {
     void alLimpiar();
 
     void alCargarEjemplo();
+
+    void alGuardar();
+
+    void alAbrir();
 }

@@ -6,12 +6,15 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.nio.file.Path;
 
 /**
  * Ventana principal (JFrame). Solo arma la interfaz y reenvía los eventos
@@ -27,6 +30,7 @@ public class VentanaPrincipal extends JFrame implements VistaCircuito {
     private final PanelCircuito panelCircuito;
     private final PanelTablaVerdad panelTabla = new PanelTablaVerdad();
     private final JLabel lblEstado = new JLabel(" ");
+    private final JFileChooser selector = crearSelector();
     private EscuchadorVentana escuchador;
 
     public VentanaPrincipal(Preferencias preferencias) {
@@ -56,6 +60,9 @@ public class VentanaPrincipal extends JFrame implements VistaCircuito {
     private JToolBar crearBarra() {
         JToolBar barra = new JToolBar();
         barra.setFloatable(false);
+        barra.add(crearBoton("Abrir…", "Abre un circuito guardado en un archivo de texto (.txt)", () -> escuchador.alAbrir()));
+        barra.add(crearBoton("Guardar…", "Guarda el circuito en un archivo de texto (.txt)", () -> escuchador.alGuardar()));
+        barra.addSeparator();
         barra.add(crearBoton("Evaluar", "Calcula el valor de cada salida", () -> escuchador.alEvaluar()));
         barra.add(crearBoton("Tabla de verdad", "Genera la tabla con todas las combinaciones",
                 () -> escuchador.alGenerarTablaVerdad()));
@@ -117,6 +124,35 @@ public class VentanaPrincipal extends JFrame implements VistaCircuito {
     public void mostrarError(String mensaje) {
         lblEstado.setText("⚠ " + mensaje);
         JOptionPane.showMessageDialog(this, mensaje, "No se pudo completar la acción", JOptionPane.WARNING_MESSAGE);
+    }
+
+    @Override
+    public Path elegirArchivoParaGuardar() {
+        selector.setDialogTitle("Guardar circuito");
+        if (selector.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+        Path ruta = selector.getSelectedFile().toPath();
+        // Si el usuario no escribió extensión, se agrega .txt para que el archivo se reconozca después.
+        if (!ruta.getFileName().toString().contains(".")) {
+            ruta = ruta.resolveSibling(ruta.getFileName() + ".txt");
+        }
+        return ruta;
+    }
+
+    @Override
+    public Path elegirArchivoParaAbrir() {
+        selector.setDialogTitle("Abrir circuito");
+        if (selector.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+        return selector.getSelectedFile().toPath();
+    }
+
+    private static JFileChooser crearSelector() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new FileNameExtensionFilter("Circuitos de texto (*.txt)", "txt"));
+        return chooser;
     }
 
     @Override

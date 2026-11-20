@@ -256,7 +256,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
             visuales.add(colocar(new VisualSalida(salida), posiciones, PanelPaleta.COLUMNA_SALIDAS, i++));
         }
 
-        // Cada visual de entrada/compuerta ofrece su salida; se busca por la fuente del modelo.
+        
         Map<FuenteLogica, ComponenteVisual> porFuente = new IdentityHashMap<>();
         for (ComponenteVisual visual : visuales) {
             if (visual.getFuente() != null) {
@@ -289,7 +289,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
         }
     }
 
-    /** Usa la posición guardada; si el archivo no la trae, acomoda el elemento en su columna. */
+ 
     private ComponenteVisual colocar(ComponenteVisual visual, PosicionesCircuito posiciones, int columna, int orden) {
         Posicion guardada = posiciones.obtener(visual.getTipoElemento(), visual.getNombreElemento());
         if (guardada != null) {

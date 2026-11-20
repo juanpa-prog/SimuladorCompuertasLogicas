@@ -3,6 +3,7 @@ package compuertas.vista.componentes;
 import compuertas.modelo.Circuito;
 import compuertas.modelo.Compuerta;
 import compuertas.modelo.FuenteLogica;
+import compuertas.persistencia.PosicionesCircuito.Tipo;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
@@ -65,6 +66,21 @@ public abstract class VisualCompuerta extends ComponenteVisual {
     @Override
     public void eliminarDelModelo(Circuito circuito) {
         circuito.eliminarCompuerta(compuerta);
+    }
+
+    @Override
+    public Tipo getTipoElemento() {
+        return Tipo.COMPUERTA;
+    }
+
+    @Override
+    public String getNombreElemento() {
+        return compuerta.getNombre();
+    }
+
+    @Override
+    public FuenteLogica getFuenteConectada(int indice) {
+        return compuerta.getEntrada(indice);
     }
 
     /** Dibuja el nombre de la compuerta (G1, G2...) sobre el cuerpo. */

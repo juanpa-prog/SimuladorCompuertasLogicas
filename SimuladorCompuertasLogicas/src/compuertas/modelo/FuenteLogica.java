@@ -8,6 +8,9 @@ package compuertas.modelo;
  */
 public interface FuenteLogica {
 
+    /** @return el nombre único de esta fuente dentro del circuito (A, B, G1...). */
+    String getNombre();
+
     /** @return el valor lógico actual de esta fuente. */
     boolean getValor();
 

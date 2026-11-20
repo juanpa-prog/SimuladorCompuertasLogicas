@@ -1,11 +1,6 @@
 package compuertas.vista;
 
-import compuertas.modelo.fabrica.CreadorAND;
-import compuertas.modelo.fabrica.CreadorNAND;
-import compuertas.modelo.fabrica.CreadorNOR;
-import compuertas.modelo.fabrica.CreadorNOT;
-import compuertas.modelo.fabrica.CreadorOR;
-import compuertas.modelo.fabrica.CreadorXOR;
+import compuertas.modelo.fabrica.CatalogoCompuertas;
 import compuertas.vista.componentes.VisualAND;
 import compuertas.vista.componentes.VisualEntrada;
 import compuertas.vista.componentes.VisualNAND;
@@ -35,9 +30,9 @@ public class PanelPaleta extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private static final int COLUMNA_ENTRADAS = 40;
-    private static final int COLUMNA_COMPUERTAS = 230;
-    private static final int COLUMNA_SALIDAS = 700;
+    public static final int COLUMNA_ENTRADAS = 40;
+    public static final int COLUMNA_COMPUERTAS = 230;
+    public static final int COLUMNA_SALIDAS = 700;
 
     private final List<ElementoPaleta> elementos;
     private EscuchadorVentana escuchador;
@@ -71,17 +66,17 @@ public class PanelPaleta extends JPanel {
         lista.add(new ElementoPaleta("Entradas y salidas", "Salida", COLUMNA_SALIDAS,
                 (c, x, y) -> new VisualSalida(c.agregarSalida(), x, y)));
         lista.add(new ElementoPaleta("Compuertas", "AND", COLUMNA_COMPUERTAS,
-                (c, x, y) -> new VisualAND(c.agregarCompuerta(new CreadorAND()), x, y)));
+                (c, x, y) -> new VisualAND(c.agregarCompuerta(CatalogoCompuertas.obtener("AND")), x, y)));
         lista.add(new ElementoPaleta("Compuertas", "OR", COLUMNA_COMPUERTAS,
-                (c, x, y) -> new VisualOR(c.agregarCompuerta(new CreadorOR()), x, y)));
+                (c, x, y) -> new VisualOR(c.agregarCompuerta(CatalogoCompuertas.obtener("OR")), x, y)));
         lista.add(new ElementoPaleta("Compuertas", "NOT", COLUMNA_COMPUERTAS,
-                (c, x, y) -> new VisualNOT(c.agregarCompuerta(new CreadorNOT()), x, y)));
+                (c, x, y) -> new VisualNOT(c.agregarCompuerta(CatalogoCompuertas.obtener("NOT")), x, y)));
         lista.add(new ElementoPaleta("Compuertas", "XOR", COLUMNA_COMPUERTAS,
-                (c, x, y) -> new VisualXOR(c.agregarCompuerta(new CreadorXOR()), x, y)));
+                (c, x, y) -> new VisualXOR(c.agregarCompuerta(CatalogoCompuertas.obtener("XOR")), x, y)));
         lista.add(new ElementoPaleta("Compuertas", "NAND", COLUMNA_COMPUERTAS,
-                (c, x, y) -> new VisualNAND(c.agregarCompuerta(new CreadorNAND()), x, y)));
+                (c, x, y) -> new VisualNAND(c.agregarCompuerta(CatalogoCompuertas.obtener("NAND")), x, y)));
         lista.add(new ElementoPaleta("Compuertas", "NOR", COLUMNA_COMPUERTAS,
-                (c, x, y) -> new VisualNOR(c.agregarCompuerta(new CreadorNOR()), x, y)));
+                (c, x, y) -> new VisualNOR(c.agregarCompuerta(CatalogoCompuertas.obtener("NOR")), x, y)));
         return lista;
     }
 

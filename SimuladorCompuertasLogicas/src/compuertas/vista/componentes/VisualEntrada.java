@@ -3,6 +3,7 @@ package compuertas.vista.componentes;
 import compuertas.modelo.Circuito;
 import compuertas.modelo.EntradaLogica;
 import compuertas.modelo.FuenteLogica;
+import compuertas.persistencia.PosicionesCircuito.Tipo;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -62,6 +63,16 @@ public class VisualEntrada extends ComponenteVisual {
     @Override
     public void eliminarDelModelo(Circuito circuito) {
         circuito.eliminarEntrada(entrada);
+    }
+
+    @Override
+    public Tipo getTipoElemento() {
+        return Tipo.ENTRADA;
+    }
+
+    @Override
+    public String getNombreElemento() {
+        return entrada.getNombre();
     }
 
     @Override

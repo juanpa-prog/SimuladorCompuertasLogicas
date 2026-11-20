@@ -10,8 +10,11 @@ import compuertas.modelo.CompuertaOR;
 import compuertas.modelo.EntradaLogica;
 import compuertas.modelo.SalidaLogica;
 import compuertas.modelo.TablaVerdad;
+import compuertas.modelo.excepciones.CircuitoException;
 import compuertas.modelo.excepciones.ConexionInvalidaException;
 import compuertas.modelo.excepciones.EntradaSinConectarException;
+import compuertas.modelo.excepciones.FormatoCircuitoException;
+import compuertas.modelo.fabrica.CatalogoCompuertas;
 import compuertas.modelo.fabrica.CreadorAND;
 import compuertas.modelo.fabrica.CreadorCompuerta;
 import compuertas.modelo.fabrica.CreadorNAND;
@@ -40,6 +43,7 @@ public class PruebasTablasVerdad {
         probarErrores();
         probarEliminacionYRestauracion();
         probarSingletonEInyeccion();
+        probarBaseParaArchivos();
 
         System.out.println();
         System.out.println("Verificaciones: " + total + " | Fallidas: " + fallos);
@@ -256,6 +260,35 @@ public class PruebasTablasVerdad {
         verificar("al eliminar G2, la salida F queda sin conexión", f.getFuente() == null);
 
         verificar("getCompuertas() es de solo lectura", esSoloLectura(circuito.getCompuertas()));
+    }
+
+    /** Lo que la carga desde archivo necesita del modelo: nombres dados, catálogo y excepción de formato. */
+    private static void probarBaseParaArchivos() {
+        titulo("Base para archivos: nombres dados, catálogo de tipos y FormatoCircuitoException");
+        Circuito c = new Circuito("Carga");
+        Compuerta g5 = c.agregarCompuerta(CatalogoCompuertas.obtener("AND"), "G5");
+        verificar("compuerta creada con el nombre indicado", g5.getNombre().equals("G5") && g5.getTipo().equals("AND"));
+        Compuerta siguiente = c.agregarCompuerta(CatalogoCompuertas.obtener("OR"));
+        verificar("el contador se ajusta: la siguiente automática es G6", siguiente.getNombre().equals("G6"));
+        try {
+            c.agregarCompuerta(CatalogoCompuertas.obtener("NOT"), "G5");
+            verificar("nombre de compuerta duplicado debe rechazarse", false);
+        } catch (CircuitoException e) {
+            verificar("nombre de compuerta duplicado rechazado", true);
+        }
+        verificar("el catálogo conoce los 6 tipos", CatalogoCompuertas.tipos().size() == 6
+                && CatalogoCompuertas.existe("NAND") && !CatalogoCompuertas.existe("XNOR"));
+        try {
+            CatalogoCompuertas.obtener("XNOR");
+            verificar("tipo desconocido debe rechazarse", false);
+        } catch (CircuitoException e) {
+            verificar("tipo de compuerta desconocido rechazado", true);
+        }
+        FormatoCircuitoException fe = new FormatoCircuitoException("cabecera inválida", 3,
+                new IllegalStateException("origen"));
+        verificar("FormatoCircuitoException indica la línea y conserva la causa",
+                fe.getLinea() == 3 && fe.getMessage().startsWith("Línea 3:") && fe.getCause() != null);
+        verificar("CircuitoException admite causa", new CircuitoException("x", new RuntimeException()).getCause() != null);
     }
 
     private static boolean esSoloLectura(List<Compuerta> lista) {

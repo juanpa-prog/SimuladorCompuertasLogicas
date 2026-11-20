@@ -86,6 +86,30 @@ public class Circuito {
         return compuerta;
     }
 
+    /**
+     * Sobrecarga que usa la carga desde archivo: la compuerta recibe el nombre indicado
+     * (debe ser único). El contador automático se ajusta para que las compuertas que se
+     * agreguen después no repitan nombres como G1, G2...
+     */
+    public Compuerta agregarCompuerta(CreadorCompuerta creador, String nombre) {
+        if (creador == null) {
+            throw new IllegalArgumentException("El creador de compuertas es obligatorio");
+        }
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new CircuitoException("El nombre de la compuerta es obligatorio.");
+        }
+        String limpio = nombre.trim();
+        if (buscarCompuerta(limpio) != null) {
+            throw new CircuitoException("Ya existe una compuerta llamada «" + limpio + "».");
+        }
+        Compuerta compuerta = creador.crear(limpio);
+        compuertas.add(compuerta);
+        if (limpio.matches("G\\d{1,6}")) {
+            contadorCompuertas = Math.max(contadorCompuertas, Integer.parseInt(limpio.substring(1)));
+        }
+        return compuerta;
+    }
+
     // ---------------------------------------------------------------
     // Conexiones
     // ---------------------------------------------------------------

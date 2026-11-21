@@ -1,12 +1,7 @@
 package compuertas.modelo.excepciones;
 
-/**
- * El contenido de un archivo de circuito es ilegible o inválido (cabecera o versión
- * incorrecta, compuerta desconocida, referencia inexistente, nombre repetido...).
- *
- * Es VERIFICADA (Exception): un archivo corrupto es una falla esperable y recuperable,
- * así que el compilador obliga a quien carga a decidir qué hacer. No se confunde con
- * {@link java.io.IOException}, que indica que no se pudo acceder al archivo.
+/*
+ El contenido de un archivo de circuito es ilegible o inválido 
  */
 public class FormatoCircuitoException extends Exception {
 

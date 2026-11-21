@@ -10,11 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Agregado raíz del modelo. COMPONE sus entradas, compuertas y salidas
- * (composición: las crea, las controla y las elimina) y esconde sus
- * colecciones: desde afuera solo se ven vistas de solo lectura.
- *
- * No conoce nada de Swing: puede usarse y probarse desde consola.
+ * Agregado raíz del modelo.
  */
 public class Circuito {
 
@@ -39,10 +35,10 @@ public class Circuito {
     }
 
     // ---------------------------------------------------------------
-    // Creación de componentes (el circuito es el dueño)
+    // Creación de componentes 
     // ---------------------------------------------------------------
 
-    /** Sobrecarga: nombre automático (A, B, C, D, E, X1, X2...). */
+ 
     public EntradaLogica agregarEntrada() {
         return agregarEntrada(siguienteNombreEntrada());
     }
@@ -56,7 +52,7 @@ public class Circuito {
         return entrada;
     }
 
-    /** Sobrecarga: nombre automático (F, G, H, I, J, Y1, Y2...). */
+
     public SalidaLogica agregarSalida() {
         return agregarSalida(siguienteNombreSalida());
     }
@@ -86,11 +82,7 @@ public class Circuito {
         return compuerta;
     }
 
-    /**
-     * Sobrecarga que usa la carga desde archivo: la compuerta recibe el nombre indicado
-     * (debe ser único). El contador automático se ajusta para que las compuertas que se
-     * agreguen después no repitan nombres como G1, G2...
-     */
+   
     public Compuerta agregarCompuerta(CreadorCompuerta creador, String nombre) {
         if (creador == null) {
             throw new IllegalArgumentException("El creador de compuertas es obligatorio");
@@ -177,7 +169,7 @@ public class Circuito {
     }
 
     // ---------------------------------------------------------------
-    // Búsqueda (por nombre, con equals y no con ==)
+    // Búsqueda (por nombre)
     // ---------------------------------------------------------------
 
     public EntradaLogica buscarEntrada(String nombre) {
@@ -208,10 +200,10 @@ public class Circuito {
     }
 
     // ---------------------------------------------------------------
-    // Evaluación (polimórfica: nunca se pregunta el tipo de compuerta)
+    // Evaluación (polimórfica)
     // ---------------------------------------------------------------
 
-    /** Evalúa todas las compuertas; falla si alguna tiene entradas sin conectar. */
+  
     public Map<String, Boolean> evaluarTodas() {
         Map<String, Boolean> resultados = new LinkedHashMap<>();
         for (Compuerta compuerta : compuertas) {
@@ -233,7 +225,7 @@ public class Circuito {
     }
 
     // ---------------------------------------------------------------
-    // Consulta (vistas de solo lectura: no se expone la colección interna)
+    // Consulta (vistas de solo lectura)
     // ---------------------------------------------------------------
 
     public List<EntradaLogica> getEntradas() {

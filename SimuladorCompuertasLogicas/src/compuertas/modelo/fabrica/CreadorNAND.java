@@ -3,7 +3,7 @@ package compuertas.modelo.fabrica;
 import compuertas.modelo.Compuerta;
 import compuertas.modelo.CompuertaNAND;
 
-/** Creador concreto de compuertas NAND. */
+
 public class CreadorNAND extends CreadorCompuerta {
 
     @Override

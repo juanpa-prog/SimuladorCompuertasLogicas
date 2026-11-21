@@ -3,16 +3,8 @@ package compuertas.modelo.fabrica;
 import compuertas.modelo.Compuerta;
 import compuertas.modelo.FuenteLogica;
 
-/**
- * Creator del patrón Factory Method (GoF).
- *
- * {@link #crearCompuerta(String)} es el factory method: cada creador
- * concreto decide qué compuerta instanciar, y este código no sabe cuál.
- * {@link #crear(String, FuenteLogica...)} es la operación que aprovecha el
- * producto creado (igual que enviarPedido() en el ejemplo de la pizzería).
- *
- * Agregar una compuerta nueva (por ejemplo XNOR) solo requiere una clase
- * nueva y su creador: no hay ningún switch que modificar.
+/*
+Creator del patrón Factory Method (GoF).
  */
 public abstract class CreadorCompuerta {
 

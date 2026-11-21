@@ -7,12 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Catálogo único de los creadores de compuertas (usa el Factory Method).
- * Relaciona el nombre de un tipo ("AND", "NOT"...) con su {@link CreadorCompuerta},
- * de modo que la paleta y el lector de archivos no necesitan ningún switch por tipo.
- *
- * Agregar una compuerta nueva = registrar su creador en este único lugar.
+/*
+  Catálogo único de los creadores de compuertas (usa el Factory Method).
  */
 public final class CatalogoCompuertas {
 

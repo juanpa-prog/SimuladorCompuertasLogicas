@@ -20,11 +20,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 
-/**
- * Pruebas de consola de guardar/cargar circuitos en archivos de texto, sin Swing.
- * Cubren el circuito completo, las posiciones y los archivos inválidos.
- * Termina con código 1 si alguna verificación falla.
- */
+
 public class PruebasPersistencia {
 
     private static final String CABECERA = "CIRCUITO;1;Prueba\n";
@@ -346,7 +342,7 @@ public class PruebasPersistencia {
         }
     }
 
-    // ------------------------------------------------------------------
+  
 
     private static Path escribir(String nombre, String contenido) throws IOException {
         Path ruta = carpeta.resolve(nombre);

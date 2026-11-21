@@ -3,21 +3,19 @@ package compuertas.modelo;
 import compuertas.modelo.excepciones.ConexionInvalidaException;
 
 /**
- * Compuerta con dos entradas (AND, OR, XOR, NAND, NOR). Agrupa lo que
- * esas cinco comparten para no duplicarlo; NOT, con una sola entrada, no
- * hereda de aquí (resuelve el reto "¿qué pasa con NOT?" de la clase 05).
+ * Compuerta con dos entradas (AND, OR, XOR, NAND, NOR). 
  */
 public abstract class CompuertaBinaria extends Compuerta {
 
     private FuenteLogica a;
     private FuenteLogica b;
 
-    /** Compuerta sin conectar (la GUI conecta después con cables). */
+
     protected CompuertaBinaria(String nombre) {
         super(nombre);
     }
 
-    /** Compuerta ya conectada, como en la red de objetos de la clase. */
+   
     protected CompuertaBinaria(String nombre, FuenteLogica a, FuenteLogica b) {
         super(nombre);
         if (a == null || b == null) {

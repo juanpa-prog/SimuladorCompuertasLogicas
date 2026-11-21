@@ -7,9 +7,7 @@ import java.util.List;
 
 /**
  * Tabla de verdad de un circuito: una fila por cada combinación de sus
- * entradas y una columna por cada entrada y cada salida. Es una foto
- * inmutable; al terminar de calcularla restaura los valores originales
- * de las entradas.
+ * entradas y una columna por cada entrada y cada salida. 
  */
 public class TablaVerdad {
 

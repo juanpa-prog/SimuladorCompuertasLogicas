@@ -1,9 +1,7 @@
 package compuertas.config;
 
 /**
- * Singleton implementado como enumeración (UML: «enumeration» Configuracion
- * { INSTANCIA }). Java garantiza una única instancia, incluso con hilos o
- * serialización. El cliente accede con {@code Configuracion.INSTANCIA}.
+ * Singleton implementado como enumeración 
  */
 public enum Configuracion implements Preferencias {
 

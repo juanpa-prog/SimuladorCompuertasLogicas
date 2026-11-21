@@ -43,10 +43,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Único punto de contacto entre la vista y el modelo. Atiende los eventos
- * (clics, cables soltados, botones), modifica el modelo, captura sus
- * excepciones y le pide a la vista que se actualice.
+/*
  */
 public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
 
@@ -54,7 +51,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
     private static final int FILAS_POR_COLUMNA = 5;
     private static final int ANCHO_COLUMNA = 210;
 
-    /** No es final: al abrir un archivo se reemplaza por el circuito cargado (ya validado). */
+    
     private Circuito circuito;
     private final VistaCircuito ventana;
     private final PanelCircuito panel;
@@ -69,7 +66,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
         this.ventana = ventana;
         this.panel = ventana.getPanelCircuito();
 
-        // Se registra como escuchador: a partir de aquí todo es dirigido por eventos.
+      
         ventana.setEscuchador(this);
         panel.setEscuchador(this);
         ventana.mostrarEstado("Agrega elementos desde la paleta, o carga el ejemplo desde la barra superior.");
@@ -117,7 +114,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
             TablaVerdad tabla = circuito.generarTablaVerdad();
             ventana.getPanelTabla().mostrar(tabla);
             ventana.mostrarEstado("Tabla de verdad generada: " + tabla.getNumeroFilas() + " combinaciones.");
-            panel.repaint(); // el modelo restauró los valores originales de las entradas
+            panel.repaint();
         } catch (CircuitoException e) {
             ventana.mostrarError(e.getMessage());
         }
@@ -179,7 +176,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
     public void alGuardar() {
         Path ruta = ventana.elegirArchivoParaGuardar();
         if (ruta == null) {
-            return; // el usuario canceló
+            return; 
         }
         if (Files.exists(ruta) && !ventana.confirmar("El archivo «" + ruta.getFileName() + "» ya existe. ¿Reemplazarlo?")) {
             return;
@@ -200,11 +197,11 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
     public void alAbrir() {
         Path ruta = ventana.elegirArchivoParaAbrir();
         if (ruta == null) {
-            return; // el usuario canceló
+            return; 
         }
         CircuitoCargado cargado;
         try {
-            // Se carga en un circuito NUEVO: si algo falla, el circuito actual no se toca.
+           
             cargado = repositorio.cargar(ruta);
         } catch (NoSuchFileException e) {
             ventana.mostrarError("No existe el archivo:\n" + ruta);
@@ -231,7 +228,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
         }
     }
 
-    /** Toma las posiciones de lo que hay dibujado: el modelo no las conoce, la vista sí. */
+    
     private PosicionesCircuito recogerPosiciones() {
         PosicionesCircuito posiciones = new PosicionesCircuito();
         for (ComponenteVisual visual : panel.getComponentes()) {
@@ -240,10 +237,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
         return posiciones;
     }
 
-    /**
-     * Dibuja el circuito cargado. Primero se construye TODO lo visual (si algo falla, la
-     * pantalla actual queda intacta) y solo después se reemplaza el modelo y el lienzo.
-     */
+  
     private void reemplazarCircuito(CircuitoCargado cargado) {
         Circuito nuevo = cargado.getCircuito();
         PosicionesCircuito posiciones = cargado.getPosiciones();
@@ -262,7 +256,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
             visuales.add(colocar(new VisualSalida(salida), posiciones, PanelPaleta.COLUMNA_SALIDAS, i++));
         }
 
-        // Cada visual de entrada/compuerta ofrece su salida; se busca por la fuente del modelo.
+        
         Map<FuenteLogica, ComponenteVisual> porFuente = new IdentityHashMap<>();
         for (ComponenteVisual visual : visuales) {
             if (visual.getFuente() != null) {
@@ -283,7 +277,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
             }
         }
 
-        // Todo se construyó sin error: ahora sí se reemplaza lo actual.
+      
         this.circuito = nuevo;
         panel.limpiar();
         ventana.getPanelTabla().limpiar();
@@ -295,7 +289,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
         }
     }
 
-    /** Usa la posición guardada; si el archivo no la trae, acomoda el elemento en su columna. */
+ 
     private ComponenteVisual colocar(ComponenteVisual visual, PosicionesCircuito posiciones, int columna, int orden) {
         Posicion guardada = posiciones.obtener(visual.getTipoElemento(), visual.getNombreElemento());
         if (guardada != null) {
@@ -338,7 +332,6 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
     // Operaciones internas
     // ---------------------------------------------------------------
 
-    /** Conecta en el modelo y, solo si fue válido, dibuja el cable. */
     private void conectar(PuntoConexion origen, PuntoConexion destino) {
         try {
             FuenteLogica fuente = origen.getComponente().getFuente();
@@ -356,7 +349,7 @@ public class ControladorCircuito implements EscuchadorPanel, EscuchadorVentana {
         ventana.getPanelTabla().limpiar();
     }
 
-    /** F = (A AND B) OR NOT(C)  y  G = XOR(F, A): la red de objetos de la tarea. */
+    /** F = (A AND B) OR NOT(C)  y  G = XOR(F, A): */
     private void construirEjemplo() {
         EntradaLogica a = circuito.agregarEntrada();
         a.setValor(true);

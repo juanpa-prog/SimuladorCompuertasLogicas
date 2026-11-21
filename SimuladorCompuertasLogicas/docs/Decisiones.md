@@ -108,3 +108,5 @@ Se anotan para ser transparentes y poder defender cada punto:
    `Pruebas.md` incluye una lista de verificación manual.
 7. **`Configuracion`** guarda un único dato (mostrar cuadrícula): el Singleton está aplicado de forma correcta, pero
    su alcance es pequeño.
+
+

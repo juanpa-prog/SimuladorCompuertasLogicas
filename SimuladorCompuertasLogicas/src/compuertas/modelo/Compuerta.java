@@ -4,12 +4,7 @@ import compuertas.modelo.excepciones.ConexionInvalidaException;
 import compuertas.modelo.excepciones.EntradaSinConectarException;
 
 /**
- * Superclase abstracta de todas las compuertas. No tiene sentido una
- * "compuerta genérica": solo define lo común (nombre, conexiones) y deja
- * a cada subclase la regla booleana en {@link #evaluar()}.
- *
- * Una compuerta ES una {@link FuenteLogica}, por lo que su salida puede
- * conectarse a la entrada de otra compuerta.
+ * Superclase abstracta de todas las compuertas.
  */
 public abstract class Compuerta implements FuenteLogica {
 
@@ -26,18 +21,15 @@ public abstract class Compuerta implements FuenteLogica {
         return nombre;
     }
 
-    /** @return "AND", "OR", "NOT"... */
+    
     public abstract String getTipo();
 
     public abstract int getNumeroEntradas();
 
-    /** @return la fuente conectada en esa posición, o null si está libre. */
     public abstract FuenteLogica getEntrada(int indice);
-
-    /** Cada subclase decide dónde guarda sus entradas. */
+   
     protected abstract void asignarEntrada(int indice, FuenteLogica fuente);
 
-    /** Regla booleana propia de cada compuerta (polimorfismo dinámico). */
     public abstract boolean evaluar();
 
     @Override
@@ -64,7 +56,7 @@ public abstract class Compuerta implements FuenteLogica {
         asignarEntrada(indice, null);
     }
 
-    /** Libera toda entrada que esté conectada a la fuente indicada. */
+   
     public final void desconectarFuente(FuenteLogica fuente) {
         for (int i = 0; i < getNumeroEntradas(); i++) {
             if (getEntrada(i) == fuente) {
@@ -96,7 +88,7 @@ public abstract class Compuerta implements FuenteLogica {
         return false;
     }
 
-    /** Para uso de las subclases: entrega la fuente o falla con un mensaje claro. */
+   
     protected final FuenteLogica exigirEntrada(int indice) {
         FuenteLogica fuente = getEntrada(indice);
         if (fuente == null) {

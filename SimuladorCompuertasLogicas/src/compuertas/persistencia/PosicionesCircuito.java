@@ -3,16 +3,14 @@ package compuertas.persistencia;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Posiciones (x, y) de los componentes en el lienzo. La posición pertenece a la VISTA,
- * no al modelo; esta clase la transporta hasta el archivo y de vuelta sin que la
- * persistencia dependa de Swing.
+/*
+ Posiciones (x, y) de los componentes en el lienzo.
  */
 public final class PosicionesCircuito {
 
     public enum Tipo { ENTRADA, COMPUERTA, SALIDA }
 
-    /** Par (x, y) inmutable. */
+    
     public static final class Posicion {
         private final int x;
         private final int y;
